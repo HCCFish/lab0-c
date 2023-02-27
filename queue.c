@@ -42,6 +42,10 @@ bool q_insert_head(struct list_head *head, char *s)
         return false;
     }
     element_t *new_element = malloc(sizeof(element_t));
+    if (!new_element) {
+        free(new_element);
+        return false;
+    }
     size_t len = strlen(s);
     new_element->value = strdup(s);
     new_element->value[len] = '\0';
