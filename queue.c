@@ -104,13 +104,35 @@ element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
 /* Return number of elements in queue */
 int q_size(struct list_head *head)
 {
-    return -1;
+    if (!head) {
+        return -1;
+    }
+    struct list_head *cur;
+    int len = 0;
+    list_for_each (cur, head) {
+        len++;
+    }
+    return len;
 }
 
 /* Delete the middle node in queue */
 bool q_delete_mid(struct list_head *head)
 {
     // https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/
+    if (!head || !head->next)
+        return false;
+    struct list_head *slow = head, *fast = head->next->next;
+    while (fast != head && fast->next != head) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    if (fast != head) {
+        slow->next = slow->next->next;
+    }
+    element_t *temp = list_entry(slow->next, element_t, list);
+    list_del(&temp->list);
+    q_release_element(temp);
+
     return true;
 }
 
